@@ -11,16 +11,16 @@ ICON_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "siste
 
 MENU_OPTIONS = {
     "user": ["Consultar"],
-    "teacher": ["Lançar Notas", "Relatórios"],
-    "admin": ["Consultar", "Lançar Notas", "Relatórios"],
+    "teacher": ["Lançar Notas", "Editar Notas", "Relatórios"],
+    "admin": ["Matricular", "Vincular Professor", "Cursos", "Matérias", "Relatórios", "Backup"],
 }
 
 
 class DashboardWindow(ctk.CTkToplevel):
     """Tela principal com sidebar e painel de conteúdo."""
 
-    SIDEBAR_COLOR = "#1B2838"
-    SIDEBAR_HOVER = "#2E4057"
+    SIDEBAR_COLOR = "#1565C0"
+    SIDEBAR_HOVER = "#0D47A1"
     BG_COLOR = "#F0F4F8"
     TEXT_COLOR = "#FFFFFF"
 
@@ -45,8 +45,8 @@ class DashboardWindow(ctk.CTkToplevel):
             self.iconbitmap(ICON_PATH)
 
     def _build_sidebar(self) -> None:
-        self.sidebar = ctk.CTkFrame(self, width=200, corner_radius=0, fg_color=self.SIDEBAR_COLOR)
-        self.sidebar.pack(side="left", fill="y")
+        self.sidebar = ctk.CTkFrame(self, width=200, corner_radius=15, fg_color=self.SIDEBAR_COLOR)
+        self.sidebar.pack(side="left", fill="y", padx=(10, 0), pady=10)
         self.sidebar.pack_propagate(False)
 
         # Título UNISA
@@ -117,13 +117,40 @@ class DashboardWindow(ctk.CTkToplevel):
 
     def _on_menu_click(self, option: str) -> None:
         self._clear_content()
-        # Placeholder — será substituído pelo conteúdo de cada opção
-        ctk.CTkLabel(
-            self.content_frame,
-            text=f"{option}",
-            font=ctk.CTkFont(size=22, weight="bold"),
-            text_color="#333333",
-        ).place(relx=0.5, rely=0.5, anchor="center")
+        if option == "Matricular":
+            from view.panels.enroll_panel import render_enroll_panel
+            render_enroll_panel(self.content_frame)
+        elif option == "Lançar Notas":
+            from view.panels.grades_panel import render_grades_panel
+            render_grades_panel(self.content_frame)
+        elif option == "Editar Notas":
+            from view.panels.edit_grades_panel import render_edit_grades_panel
+            render_edit_grades_panel(self.content_frame)
+        elif option == "Consultar":
+            from view.panels.consult_panel import render_consult_panel
+            render_consult_panel(self.content_frame, self.user)
+        elif option == "Cursos":
+            from view.panels.courses_panel import render_courses_panel
+            render_courses_panel(self.content_frame)
+        elif option == "Matérias":
+            from view.panels.subjects_panel import render_subjects_panel
+            render_subjects_panel(self.content_frame)
+        elif option == "Vincular Professor":
+            from view.panels.assign_teacher_panel import render_assign_teacher_panel
+            render_assign_teacher_panel(self.content_frame)
+        elif option == "Relatórios":
+            from view.panels.report_panel import render_report_panel
+            render_report_panel(self.content_frame, self.user)
+        elif option == "Backup":
+            from view.panels.backup_panel import render_backup_panel
+            render_backup_panel(self.content_frame)
+        else:
+            ctk.CTkLabel(
+                self.content_frame,
+                text=f"{option}",
+                font=ctk.CTkFont(size=22, weight="bold"),
+                text_color="#333333",
+            ).place(relx=0.5, rely=0.5, anchor="center")
 
     def _on_close(self) -> None:
         self.destroy()

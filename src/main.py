@@ -10,6 +10,5 @@ def main() -> None:
     app = HomeWindow()
     app.mainloop()
 
-
 if __name__ == "__main__":
     main()
