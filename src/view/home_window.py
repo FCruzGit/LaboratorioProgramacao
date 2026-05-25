@@ -7,7 +7,7 @@ from PIL import Image
 from view.register_popup import RegisterPopup
 from view.forgot_password_popup import ForgotPasswordPopup
 from view.dashboard_window import DashboardWindow
-from view.utils import center_window
+from view.utils import center_window, ICON_PATH, BG_COLOR, CARD_COLOR, BTN_PRIMARY, BTN_SECONDARY, TEXT_COLOR
 from service.database_service import authenticate
 
 # Faz o ícone aparecer na barra de tarefas do Windows
@@ -17,21 +17,12 @@ ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("gestao_notas.app"
 class HomeWindow(ctk.CTk):
     """Tela de login do sistema de gestão de notas."""
 
-    BG_COLOR = "#DCE8F0"
-    CARD_COLOR = "#FFFFFF"
-    BTN_PRIMARY = "#1565C0"
-    BTN_SECONDARY = "#616161"
-    TEXT_COLOR = "#1565C0"
-    ICON_PATH = os.path.join(
-        os.path.dirname(__file__), "..", "..", "assets", "sistema", "icon.ico"
-    )
-
     def __init__(self) -> None:
         super().__init__()
 
         self.title("Sistema de Gestão de Notas")
         self.resizable(False, False)
-        self.configure(fg_color=self.BG_COLOR)
+        self.configure(fg_color=BG_COLOR)
 
         ctk.set_appearance_mode("light")
 
@@ -40,13 +31,13 @@ class HomeWindow(ctk.CTk):
         self._build_ui()
 
     def _set_icon(self) -> None:
-        if os.path.exists(self.ICON_PATH):
-            self.iconbitmap(self.ICON_PATH)
+        if os.path.exists(ICON_PATH):
+            self.iconbitmap(ICON_PATH)
 
     def _build_ui(self) -> None:
         # Frame esquerdo (formulário de login)
         self.login_frame = ctk.CTkFrame(
-            self, width=420, height=520, fg_color=self.CARD_COLOR, corner_radius=20
+            self, width=420, height=520, fg_color=CARD_COLOR, corner_radius=20
         )
         self.login_frame.place(x=30, y=40)
         self.login_frame.pack_propagate(False)
@@ -56,7 +47,7 @@ class HomeWindow(ctk.CTk):
             self.login_frame,
             text="Entrar",
             font=ctk.CTkFont(size=32, weight="bold"),
-            text_color=self.TEXT_COLOR,
+            text_color=TEXT_COLOR,
         ).pack(anchor="w", padx=40, pady=(40, 30))
 
         # Campo Usuário
@@ -101,7 +92,7 @@ class HomeWindow(ctk.CTk):
             self.login_frame,
             text="Entrar",
             font=ctk.CTkFont(size=15, weight="bold"),
-            fg_color=self.BTN_PRIMARY,
+            fg_color=BTN_PRIMARY,
             hover_color="#0D47A1",
             height=45,
             corner_radius=6,
@@ -113,7 +104,7 @@ class HomeWindow(ctk.CTk):
             self.login_frame,
             text="Cadastrar-se",
             font=ctk.CTkFont(size=15, weight="bold"),
-            fg_color=self.BTN_SECONDARY,
+            fg_color=BTN_SECONDARY,
             hover_color="#424242",
             height=45,
             corner_radius=6,
@@ -125,7 +116,7 @@ class HomeWindow(ctk.CTk):
             self.login_frame,
             text="Esqueci minha senha",
             font=ctk.CTkFont(size=13),
-            text_color=self.TEXT_COLOR,
+            text_color=TEXT_COLOR,
             cursor="hand2",
         )
         forgot_label.pack(pady=(5, 0))
@@ -138,7 +129,7 @@ class HomeWindow(ctk.CTk):
         if os.path.exists(img_path):
             img = Image.open(img_path)
             self.home_image = ctk.CTkImage(light_image=img, dark_image=img, size=(350, 350))
-            img_label = ctk.CTkLabel(self, image=self.home_image, text="", fg_color=self.BG_COLOR)
+            img_label = ctk.CTkLabel(self, image=self.home_image, text="", fg_color=BG_COLOR)
             img_label.place(x=500, y=130)
 
     def _on_login(self) -> None:

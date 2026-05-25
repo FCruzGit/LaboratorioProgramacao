@@ -1,4 +1,14 @@
-"""Utilitários compartilhados das views."""
+"""Utilitários e constantes compartilhadas das views."""
+
+import os
+
+ICON_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "sistema", "icon.ico")
+
+BG_COLOR = "#DCE8F0"
+CARD_COLOR = "#FFFFFF"
+BTN_PRIMARY = "#1565C0"
+BTN_SECONDARY = "#616161"
+TEXT_COLOR = "#1565C0"
 
 
 def center_window(window, width: int, height: int) -> None:

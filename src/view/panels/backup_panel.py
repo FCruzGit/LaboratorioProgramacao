@@ -1,13 +1,8 @@
 """Painel de backup (admin)."""
 
-import os
-import zipfile
-from datetime import datetime
 import customtkinter as ctk
 from tkinter import messagebox
-
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "..", "database", "data.json")
-BACKUP_DIR = os.path.dirname(DB_PATH)
+from service.backup_service import generate_backup
 
 
 def render_backup_panel(parent) -> None:
@@ -22,19 +17,12 @@ def render_backup_panel(parent) -> None:
     status_label.pack(anchor="w", padx=30, pady=(10, 0))
 
     def _gerar_backup():
-        if not os.path.exists(DB_PATH):
+        zip_name = generate_backup()
+        if zip_name:
+            status_label.configure(text=f"✓ Backup gerado: {zip_name}")
+            messagebox.showinfo("Sucesso", f"Backup salvo em:\ndatabase/{zip_name}")
+        else:
             messagebox.showerror("Erro", "Arquivo de dados não encontrado.")
-            return
-
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        zip_name = f"backup_{timestamp}.zip"
-        zip_path = os.path.join(BACKUP_DIR, zip_name)
-
-        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-            zf.write(DB_PATH, "data.json")
-
-        status_label.configure(text=f"✓ Backup gerado: {zip_name}")
-        messagebox.showinfo("Sucesso", f"Backup salvo em:\ndatabase/{zip_name}")
 
     ctk.CTkButton(
         parent, text="Gerar Backup", font=ctk.CTkFont(size=15, weight="bold"),
